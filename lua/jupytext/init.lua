@@ -67,6 +67,9 @@ local cleanup = function(ipynb_filename, delete)
 end
 
 local read_from_ipynb = function(ipynb_filename)
+  if utils.is_empty_or_new(ipynb_filename) then
+    utils.create_new_notebook(ipynb_filename)
+  end
   local metadata = utils.get_ipynb_metadata(ipynb_filename)
   local ipynb_filename = vim.fn.resolve(vim.fn.expand(ipynb_filename))
 

@@ -44,4 +44,66 @@ M.check_key = function(tbl, key)
   return false
 end
 
+M.get_empty_notebook = function()
+  -- Ref: https://github.com/benlubas/molten-nvim/blob/main/docs/Notebook-Setup.md
+  -- TODO: Other fts
+  local empty_notebook = [[
+    {
+      "cells": [
+      {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+          ""
+        ]
+      }
+      ],
+      "metadata": {
+      "kernelspec": {
+        "display_name": "Python 3",
+        "language": "python",
+        "name": "python3"
+      },
+      "language_info": {
+        "codemirror_mode": {
+          "name": "ipython"
+        },
+        "file_extension": ".py",
+        "mimetype": "text/x-python",
+        "name": "python",
+        "nbconvert_exporter": "python",
+        "pygments_lexer": "ipython3"
+      }
+      },
+      "nbformat": 4,
+      "nbformat_minor": 5
+    }
+  ]]
+  return empty_notebook
+end
+
+M.create_new_notebook = function(path)
+  -- Ref: https://github.com/benlubas/molten-nvim/blob/main/docs/Notebook-Setup.md
+  local file = io.open(path, "w")
+  if file then
+    file:write(M.get_empty_notebook())
+    file:close()
+  else
+    -- TODO: Proper error
+    print("Error: Could not open new notebook file for writing.")
+  end
+end
+
+M.is_empty_or_new = function(filename)
+  -- Ref: https://github.com/GCBallesteros/jupytext.nvim/pull/31/files
+  local file = io.open(filename, "r")
+  if not file then
+    return true
+  end
+  local file_content = file:read "a"
+  file:close()
+  return file_content == ""
+end
+
+
 return M
